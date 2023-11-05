@@ -1,0 +1,118 @@
+<html>
+<head>
+	<title>Julia Set</title>
+	<style>
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+		body{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			display: flex;
+			flex-direction: column;
+		}
+		.heading{
+			font-size: 39px;
+			margin-bottom: 30px;
+			text-decoration: 1px double underline orange;
+		}
+		#canvas{
+			border: 2px solid black;
+		}
+	</style>
+</head>
+<body>
+	<span class="heading">Julia Set</span>
+	<canvas id="canvas"></canvas>
+</body>
+
+<script>
+	let C, MAX_ITERATIONS, width, height, MIN_X, MAX_X, MIN_Y, MAX_Y, Z, C_real, C_img;
+	MAX_ITERATIONS = 100;
+	width = 800;
+	height = 400;
+	MIN_X = -2;
+	MAX_X = 2;
+	MIN_Y = -1;
+	MAX_Y = 1;
+	Z = [0, 0];
+	C_real =  -0.70176;
+	C_img = -0.3842;
+	var canvas;
+	var context;
+	window.onload = function init(){
+		canvas = document.getElementById("canvas");
+		canvas.width = width;
+		canvas.height = height;
+		context = canvas.getContext('2d');
+		for(let i = 0; i < width; i++){
+			for(let j = 0; j < height; j++){
+				x = scale(i, 0, width, MIN_X, MAX_X);
+				y = scale(j, 0, height, MIN_Y, MAX_Y);
+				Z = [x, y];
+				let iterations = 0;
+
+				while(iterations < MAX_ITERATIONS){
+					ZZ_real = Z[0] * Z[0] - Z[1] * Z[1];
+					ZZ_img = 2 * Z[0] * Z[1];
+
+					Z[0] = ZZ_real + C_real;
+					Z[1] = ZZ_img +  C_img;
+
+					iterations += 1;
+
+					if(Z[0] * Z[0] + Z[1] * Z[1] > 4){
+						break;
+					}
+				}
+				var color = (iterations == MAX_ITERATIONS) ? "#000": getColor(iterations);
+				context.fillStyle = color;
+				context.fillRect(i, j, 1, 1);
+			}
+		}
+	}
+
+	function scale(value, min, max, new_min, new_max){
+		return new_min + ((value - min) / (max - min)) * (new_max - new_min);
+	}
+
+	function getColor(iterations){
+		// var colorValue = scale(iterations, 0, MAX_ITERATIONS, 0, 255);
+		// return "rgb("+colorValue+","+colorValue+","+colorValue+")";
+
+		// var hue = scale(iterations, 0, MAX_ITERATIONS, 0, 360);
+		// var saturation = scale(iterations, 0, MAX_ITERATIONS, 0, 100);
+		// var lightness = scale(iterations, 0, MAX_ITERATIONS, 0, 100);
+		// return "hsl("+hue+","+saturation+"%,"+lightness+"%)";
+
+		let i = iterations % 16;
+	    let mapping = new Array(16);
+	    mapping[0] = "rgb(66, 30, 15)";
+	    mapping[1] = "rgb(25, 7, 26)";
+	    mapping[2] = "rgb(9, 1, 47)";
+	    mapping[3] = "rgb(4, 4, 73)";
+	    mapping[4] = "rgb(0, 7, 100)";
+	    mapping[5] = "rgb(12, 44, 138)";
+	    mapping[6] = "rgb(24, 82, 177)";
+	    mapping[7] = "rgb(57, 125, 209)";
+	    mapping[8] = "rgb(134, 181, 229)";
+	    mapping[9] = "rgb(211, 236, 248)";
+	    mapping[10] = "rgbb(241, 233, 191)";
+	    mapping[11] = "rgbb(248, 201, 95)";
+	    mapping[12] = "rgbb(255, 170, 0)";
+	    mapping[13] = "rgbb(204, 128, 0)";
+	    mapping[14] = "rgbb(153, 87, 0)";
+	    mapping[15] = "rgbb(106, 52, 3)";
+	    return mapping[i];
+
+	    // let i = iterations % 7;
+	    // let mapping = new Array("violet", "indigo" ,"blue", "green", "yellow", "orange", "red");
+	    // return mapping[i];
+	}
+
+</script>
+
+
+</html>
